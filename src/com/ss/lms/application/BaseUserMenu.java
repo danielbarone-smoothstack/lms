@@ -1,39 +1,87 @@
 package com.ss.lms.application;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 import com.ss.lms.constants.Constants;
+import com.ss.lms.entity.Book;
+import com.ss.lms.entity.Branch;
+import com.ss.lms.service.BaseUserService;
 
 public abstract class BaseUserMenu {
 	
-	String userType;
+	private String userType;
+	protected HashMap<Integer, Callable> options;
+	protected static Scanner scan;
 	
-	BaseUserMenu(String userType) {
+	BaseUserMenu(String userType, Scanner scan) {
 		this.userType = Constants.getColor("header", userType);
+		this.options = new HashMap<Integer, Callable>();
+		this.scan = scan;
 	}
 
-	public void getSelection() {
+	public abstract boolean driver();
+
+	public static Branch getBranchSelection(BaseUserService bService) {
+		// Get branch list w/ branch name and address
+		List<Branch> branches = bService.getBranches(null);
+		List<String> branchNames = branches.stream().map(branch -> branch.toString()).collect(Collectors.toList());;
+		
+		// prompt options
+		int selection = promptOptions(branchNames);
+		if (selection == -1) {
+			return new Branch(-1, null, null);
+		} else if (selection == 0) {
+			return new Branch(0, null, null);
+		}
+		// return selected branch ID
+		return branches.get(selection - 1);
+	}
+
+	public static Book getBookSelection(Branch branch) {
+		List<Book> bookObjs = branch.getBooks();
+		List<String> books = bookObjs.stream().map(book -> book.toString()).collect(Collectors.toList());
+
+		int selection = promptOptions(books);
+		if (selection == -1) {
+			return new Book(-1, null);
+		} else if (selection == 0) {
+			return new Book(0, null);
+		}
+
+		return bookObjs.get(selection - 1);
+	}
+
+	private void printGetSelection() {
 		System.out.println(Constants.LINE_BREAK);
-		System.out.println(Constants.MAKE_SELECTION);
+		System.out.print(Constants.MAKE_SELECTION);
+	}
+
+	public static void printMainMenu() {
+		System.out.println(Constants.MENU_LINE_BREAK);
+		System.out.println(Constants.WELCOME_MESSAGE);
+		System.out.println(Constants.LINE_BREAK);
+		System.out.println(Constants.USER_TYPES);
+		System.out.println(Constants.LINE_BREAK);
+		System.out.print(Constants.MAKE_SELECTION);
 	}
 	
-	public void printMenu() {
+	public void printMenuHeader() {
 		System.out.println("\n");
 		System.out.println(Constants.MENU_LINE_BREAK);
 		System.out.println(userType + " " + Constants.MENU);
 		System.out.println(Constants.LINE_BREAK);
 	}
-	
-	public abstract boolean driver();
 
-	public String promptOptions(String[] options) {
-		Scanner scan = new Scanner(System.in);
+	public static Integer promptOptions(List<String> options) {
 		do {
-			int option;
-			for (option = 1; option <= options.length; option++) {
-				System.out.println(option + ") " + options[option]);
+			int option = 1;
+			for (String description : options) {
+				System.out.println(option + ") " + description);
+				option++;
 			}
 
 			if (option == 1) {
@@ -53,7 +101,7 @@ public abstract class BaseUserMenu {
 				selection = Integer.parseInt(selectionString);
 			} catch (Exception e) {
 				if (selectionString.equals("quit")) {
-					return "false";
+					return -1;
 				}
 				System.out.println(Constants.INCORRECT_INPUT);
 				continue;
@@ -62,11 +110,11 @@ public abstract class BaseUserMenu {
 			// Check go previous menu
 			if (selection == prevMenuOption) {
 				System.out.println(Constants.RETURNING);
-				return "true";
+				return 0;
 
 			// Proceed w/ a function
-			} else if (selection >= 1 && selection < options.length + 2) {
-				return selection.toString();
+			} else if (selection >= 1 && selection < options.size() + 2) {
+				return selection;
 			
 			} else {
 				System.out.println(Constants.INCORRECT_INPUT);
@@ -75,7 +123,6 @@ public abstract class BaseUserMenu {
 	}
 
 	public boolean promptOptions(String[] options, HashMap<Integer, Callable> optionFuncs) {
-		Scanner scan = new Scanner(System.in);
 
 		do {
 			int option = 1;
@@ -93,7 +140,7 @@ public abstract class BaseUserMenu {
 			System.out.println(prevMenuOption + ") " + Constants.PREVIOUS_MENU);
 
 			// Grab selection
-			getSelection();
+			printGetSelection();
 			String selectionString = scan.nextLine();
 
 			// Ensure selection is integer

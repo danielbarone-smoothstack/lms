@@ -7,6 +7,7 @@ public class Borrower {
   private String name;
   private String address;
   private String phone;
+  private List<Book> books;
 
   public Borrower(Integer cardNo, String name, String address, String phone) {
     this.cardNo = cardNo;
@@ -45,6 +46,14 @@ public class Borrower {
 
   public void setPhone(String phone) {
     this.phone = phone;
+  }
+
+  public List<Book> getBooks() {
+    return books;
+  }
+
+  public void setBooks(List<Book> books) {
+    this.books = books;
   }
 
 }

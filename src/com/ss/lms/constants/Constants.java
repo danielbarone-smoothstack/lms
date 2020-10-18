@@ -63,11 +63,14 @@ public final class Constants {
 	public static final String RETURN = getColor("blue", "Return a book");
 	public static final String[] MAIN_BORROWER_OPTIONS = new String[] {CHECKOUT, RETURN};
 	public static final String CHECKOUT_BRANCH = getColor("blue",
-			"Pick the branch you want to check out from:\n");
-	public static final String CHECKOUT_BOOK = getColor("blue", "Pick the book you want to check out:\n");
+			"\nPick the branch you want to check out from:");
+	public static final String CHECKOUT_BOOK = getColor("blue", "Pick the book you want to check out:");
 	public static final String RETURN_BRANCH = getColor("blue",
 			"Pick the branch you want to return a book to:\n");
 	public static final String RETURN_BOOK = getColor("blue", "Pick the book you want to return:\n");
+	public static final String ALREADY_BORROWED = getColor("red", "You've already borrowed that book!\n");
+	public static final String NO_COPIES = getColor("red", "Sorry, we don't currently have copies of that book.\n");
+
 
 	// administrator
 	//// driver function

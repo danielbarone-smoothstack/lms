@@ -11,14 +11,13 @@ public class Loan {
 	private Timestamp dueDate;
 	private Timestamp dateIn;
 
-	public Loan(Integer bookId, Integer branchId, Integer cardNo, Timestamp dateOut, Timestamp dueDate,
-			Timestamp dateIn) {
-		this.setBookId(bookId);
-		this.setBranchId(branchId);
-		this.setCardNo(cardNo);
-		this.setDateOut(dateOut);
-		this.setDueDate(dueDate);
-		this.setDateIn(dateIn);
+	public Loan(Integer bookId, Integer branchId, Integer cardNo, Timestamp dateOut, Timestamp dueDate) {
+		this.bookId = bookId;
+		this.branchId = branchId;
+		this.cardNo = cardNo;
+		this.dateOut = dateOut;
+		this.dueDate = dueDate;
+		this.dateIn = null;
 	}
 
 	public Integer getBookId() {
