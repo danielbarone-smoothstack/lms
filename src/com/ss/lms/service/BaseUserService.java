@@ -1,15 +1,11 @@
 package com.ss.lms.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.ss.lms.dao.BookDAO;
 import com.ss.lms.dao.BranchDAO;
-import com.ss.lms.entity.Book;
 import com.ss.lms.entity.Branch;
 
 public abstract class BaseUserService {

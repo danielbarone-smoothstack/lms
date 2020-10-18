@@ -1,7 +1,6 @@
 package com.ss.lms.entity;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 public class Loan {
 	private Integer bookId;

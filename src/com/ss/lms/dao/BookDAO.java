@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ss.lms.entity.Book;
-import com.ss.lms.entity.Book;
 
 public class BookDAO extends BaseDAO<Book>{
 
