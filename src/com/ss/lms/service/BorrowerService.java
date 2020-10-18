@@ -8,6 +8,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.ss.lms.entity.Borrower;
+import com.ss.lms.entity.Book;
+import com.ss.lms.entity.Branch;
+import com.ss.lms.dao.BookDAO;
 import com.ss.lms.dao.BorrowerDAO;
 import com.ss.lms.entity.Loan;
 import com.ss.lms.dao.LoanDAO;
@@ -60,5 +63,43 @@ public class BorrowerService extends BaseUserService {
     	}
     }
     return true;
+  }
+
+  public boolean returnBook(Integer bookId, Integer branchId, Integer cardNo) throws SQLException {
+    Date date = new Date();
+    Timestamp dateIn = new Timestamp(date.getTime());
+
+    Connection conn = null;
+    try { 
+    	conn = conUtil.getConnection();
+    	LoanDAO loanDAO = new LoanDAO(conn);
+    	loanDAO.updateLoan(bookId, branchId, cardNo, dateIn);
+    	conn.commit();
+    } catch (ClassNotFoundException | SQLException e) {
+    	e.printStackTrace();
+		if (conn != null) {
+			conn.rollback();
+		}
+		return false;
+    } finally {
+    	if (conn != null) {
+    		conn.close();
+    	}
+    }
+    return true;
+
+  }
+
+  public List<Book> getBookSelection(Branch branch, Borrower borrower) {
+    try (Connection conn = conUtil.getConnection()) {
+      BookDAO bookDAO = new BookDAO(conn);
+      List<Book> bookObjs = bookDAO.readAllBooksByBranchBorrower(branch, borrower);
+      return bookObjs;
+      
+    } catch (ClassNotFoundException | SQLException e) {
+    	e.printStackTrace();
+    	return null;
+    }
+    
   }
 }

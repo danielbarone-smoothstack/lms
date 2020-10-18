@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ss.lms.entity.Book;
+import com.ss.lms.entity.Borrower;
+import com.ss.lms.entity.Branch;
 
 public class BookDAO extends BaseDAO<Book>{
 
@@ -38,6 +40,12 @@ public class BookDAO extends BaseDAO<Book>{
 	public List<Book> readAllBooksByName(String searchString) throws SQLException, ClassNotFoundException {
 		searchString = "%"+searchString+"%";
 		return read("SELECT * FROM tbl_book WHERE title LIKE ?", new Object[] {searchString});
+	}
+
+	public List<Book> readAllBooksByBranchBorrower(Branch branch, Borrower borrower) throws SQLException, ClassNotFoundException {
+		return read("SELECT * FROM tbl_book WHERE bookId IN (SELECT bookId FROM tbl_book_loans WHERE branchId = ? and cardNo = ? and (dateIn is NULL))",
+			new Object[] { branch.getBranchId(), borrower.getCardNo() }
+		);
 	}
 
 	@Override

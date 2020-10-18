@@ -51,7 +51,6 @@ public abstract class BaseUserMenu {
 		} else if (selection == 0) {
 			return new Book(0, null);
 		}
-
 		return bookObjs.get(selection - 1);
 	}
 
