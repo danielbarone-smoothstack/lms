@@ -90,7 +90,7 @@ public class BorrowerService extends BaseUserService {
 
   }
 
-  public List<Book> getBookSelection(Branch branch, Borrower borrower) {
+  public List<Book> getBooks(Branch branch, Borrower borrower) {
     try (Connection conn = conUtil.getConnection()) {
       BookDAO bookDAO = new BookDAO(conn);
       List<Book> bookObjs = bookDAO.readAllBooksByBranchBorrower(branch, borrower);
@@ -100,6 +100,5 @@ public class BorrowerService extends BaseUserService {
     	e.printStackTrace();
     	return null;
     }
-    
   }
 }

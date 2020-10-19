@@ -25,25 +25,23 @@ public abstract class BaseUserMenu {
 
 	public abstract boolean driver();
 
-	public Branch getBranchSelection(BaseUserService bService) {
+	public Branch getBranchSelection(List<Branch> branchObjects) {
 		// Get branch list w/ branch name and address
-		List<Branch> branches = bService.getBranches(null);
-		List<String> branchNames = branches.stream().map(branch -> branch.toString()).collect(Collectors.toList());;
+		List<String> branches = branchObjects.stream().map(branch -> branch.toString()).collect(Collectors.toList());;
 		
 		// prompt options
-		int selection = promptOptions(branchNames);
+		int selection = promptOptions(branches);
 		if (selection == -1) {
 			return new Branch(-1, null, null);
 		} else if (selection == 0) {
 			return new Branch(0, null, null);
 		}
 		// return selected branch ID
-		return branches.get(selection - 1);
+		return branchObjects.get(selection - 1);
 	}
 
-	public Book getBookSelection(Branch branch) {
-		List<Book> bookObjs = branch.getBooks();
-		List<String> books = bookObjs.stream().map(book -> book.toString()).collect(Collectors.toList());
+	public Book getBookSelection(List<Book> bookObjects) {
+		List<String> books = bookObjects.stream().map(book -> book.toString()).collect(Collectors.toList());
 
 		int selection = promptOptions(books);
 		if (selection == -1) {
@@ -51,7 +49,7 @@ public abstract class BaseUserMenu {
 		} else if (selection == 0) {
 			return new Book(0, null);
 		}
-		return bookObjs.get(selection - 1);
+		return bookObjects.get(selection - 1);
 	}
 
 	private void printGetSelection() {
@@ -72,6 +70,12 @@ public abstract class BaseUserMenu {
 		System.out.println("\n");
 		System.out.println(Constants.MENU_LINE_BREAK);
 		System.out.println(userType + " " + Constants.MENU);
+		System.out.println(Constants.LINE_BREAK);
+	}
+
+	public void printSubMenu(String subMenu) {
+		System.out.println("\n");
+		System.out.println(subMenu);
 		System.out.println(Constants.LINE_BREAK);
 	}
 

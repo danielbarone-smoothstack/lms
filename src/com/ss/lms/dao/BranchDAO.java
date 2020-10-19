@@ -16,6 +16,18 @@ public class BranchDAO extends BaseDAO {
 		super(conn);
 	}
 
+	public void updateNoOfCopies(Branch branch, Integer bookId, Integer noOfCopies) throws SQLException, ClassNotFoundException {
+		save("UPDATE tbl_book_copies SET noOfCopies = ? WHERE branchId = ? AND bookId = ?",
+			new Object[] { noOfCopies, branch.getBranchId(), bookId }
+		);
+	}
+
+	public void updateBranch(Branch branch) throws SQLException, ClassNotFoundException {
+		save("UPDATE tbl_library_branch SET branchAddress = ?, branchName = ? WHERE branchId = ?",
+			new Object[] { branch.getBranchAddress(), branch.getBranchName(), branch.getBranchId() }
+		);
+	}
+
 	public List<Branch> readAllBranches() throws SQLException, ClassNotFoundException {
 		return read("SELECT * FROM tbl_library_branch", null);
 	}

@@ -36,8 +36,8 @@ public class BorrowerMenu extends BaseUserMenu implements Callable {
 
 	public boolean checkoutBook() throws Exception {
 		// Get branch selection
-		System.out.println(Constants.CHECKOUT_BRANCH);
-		Branch branch = getBranchSelection(service);
+		printSubMenu(Constants.CHECKOUT_BRANCH);
+		Branch branch = getBranchSelection(service.getBranches(null));
 		// Exit program
 		if (branch.getBranchId() == -1) {
 			return false;
@@ -47,8 +47,8 @@ public class BorrowerMenu extends BaseUserMenu implements Callable {
 		}
 
 		// Get book selection
-		System.out.println(Constants.CHECKOUT_BOOK);
-		Book book = getBookSelection(branch);
+		printSubMenu(Constants.CHECKOUT_BOOK);
+		Book book = getBookSelection(branch.getBooks());
 		// Exit program
 		if (book.getBookId() == -1) {
 			return false;
@@ -74,8 +74,8 @@ public class BorrowerMenu extends BaseUserMenu implements Callable {
 	}
 
 	public boolean returnBook() throws Exception {
-		System.out.println(Constants.RETURN_BRANCH);
-		Branch branch = getBranchSelection(service);
+		printSubMenu(Constants.RETURN_BRANCH);
+		Branch branch = getBranchSelection(service.getBranches(null));
 		
 		// Exit program if user typed 'quit'
 		if (branch.getBranchId() == -1) {
@@ -86,21 +86,17 @@ public class BorrowerMenu extends BaseUserMenu implements Callable {
 		}
 
 		// Get list of book options to display to user
-		System.out.println(Constants.RETURN_BOOK);
-		List<Book> bookObjs = service.getBookSelection(branch, borrower);
-		List<String> books = bookObjs.stream().map(book -> book.toString()).collect(Collectors.toList());
+		printSubMenu(Constants.RETURN_BOOK);
+		// Get the user's book selection
+		Book book = getBookSelection(service.getBooks(branch, borrower));
 
-		int selection = promptOptions(books);
 		// if user typed quit, exit program
-		if (selection == -1) {
+		if (book.getBookId() == -1) {
 			return false;
 		// Return to prev menu if invalid or selected prev menu
-		} else if (selection == 0) {
+		} else if (book.getBookId() == 0) {
 			return true;
 		}
-
-		// Get the user's book selection
-		Book book = bookObjs.get(selection - 1);
 		
 		// Perform the return book functionality
 		return service.returnBook(book.getBookId(), branch.getBranchId(), borrower.getCardNo()); 
@@ -119,7 +115,7 @@ public class BorrowerMenu extends BaseUserMenu implements Callable {
 					return borrower;
 				}
 			} catch (Exception e) {
-				if (selection == "quit") {
+				if (selection.equals("quit")) {
 					return new Borrower(-1, null, null, null);
 				}
 			}

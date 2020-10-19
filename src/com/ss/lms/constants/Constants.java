@@ -40,8 +40,12 @@ public final class Constants {
 	public static final String MENU_LINE_BREAK = "=======================================";
 	public static final String MENU = getColor("header", "Menu");
 	public static final String NO_DATA = getColor("red", "No data available.");
-	public static final String RETURNING = getColor("green", "Returning to previous menu.");
-	
+	public static final String RETURNING = getColor("green", "\nReturning to previous menu.\n");
+
+	// CRUD
+	public static final String SUCCESSFUL_UPDATE = getColor("green", "\nSuccessfully updated.\n");
+	public static final String FAILED_UPDATE = getColor("green", "\nFailed to update.\n");
+
 	// driver
 	public static final String WELCOME_MESSAGE = getColor("header",
 			"Welcome to the GCIT Library Management\nSystem. Which category of user are you?");
@@ -55,8 +59,13 @@ public final class Constants {
 	public static final String ADD_COPIES = getColor("blue", "Add Copies of a Book to the Branch");
 	public static final String[] LIB3_OPTIONS = new String[] {UPDATE_LIBRARY, ADD_COPIES};
 	public static final String SELECT_BRANCH = "Select a Branch\n" + LINE_BREAK;
-
-  // borrower
+	public static final String PICK_BOOK = "\nPick the Book you want to add copies of";
+	public static final String EXISTING_NUM_COPIES = "\nExisting number of copies: ";
+	public static final String ENTER_NEW_NUM_COPIES = "Enter new number of copies: ";
+	public static final String NEW_BRANCH_NAME = "Please enter new branch name or enter N/A for no change: ";
+	public static final String NEW_BRANCH_ADDRESS = "Please enter new branch address or enter N/A for no change: ";
+	
+	// borrower
 	public static final String CARD_NUMBER_PROMPT = getColor("blue", "Enter your card number: ");
 	public static final String TRY_AGAIN = getColor("red", "\nPlease try a different number.\n");
 	// BORR1
