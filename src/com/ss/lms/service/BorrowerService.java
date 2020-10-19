@@ -47,7 +47,7 @@ public class BorrowerService extends BaseUserService {
     try { 
     	conn = conUtil.getConnection();
     	LoanDAO loanDAO = new LoanDAO(conn);
-    	Loan loan = new Loan(bookId, branchId, cardNo, dateOut, dueDate);
+    	Loan loan = new Loan(bookId, branchId, cardNo, dateOut, dueDate, null);
     	loanDAO.addLoan(loan);
     	conn.commit();
     	
@@ -87,7 +87,6 @@ public class BorrowerService extends BaseUserService {
     	}
     }
     return true;
-
   }
 
   public List<Book> getBooks(Branch branch, Borrower borrower) {

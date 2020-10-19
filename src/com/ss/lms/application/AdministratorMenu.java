@@ -13,17 +13,10 @@ import com.ss.lms.entity.Book;
 import com.ss.lms.entity.Borrower;
 import com.ss.lms.entity.Branch;
 import com.ss.lms.entity.Genre;
+import com.ss.lms.entity.Loan;
 import com.ss.lms.entity.Publisher;
 import com.ss.lms.service.AdministratorService;
 
-/*
-	Add/Update/Delete/Read Book and Author
-! Add/Update/Delete/Read Genres !
-	Add/Update/Delete/Read Publishers
-	Add/Update/Delete/Read Library Branches
-	Add/Update/Delete/Read Borrowers
-	Overrride Due Date for a Book Loan
-*/
 public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean> {
 	
 	private AdministratorService service;
@@ -56,14 +49,25 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 			case 5:
 				printSubMenu(Constants.MENU_FIVE);
 				return audrBorrower();
-			// case 6:
-			// 	promptOptions(Constants.ADMIN_BOOK_AND_AUTHOR_OPTIONS, )
-			// 	return overrideDueDate();
+			case 6:
+				return overrideDueDate();
 			default:
 				return true;
 		}
 	}
 	
+	
+	public Loan getLoanSelection(List<Loan> loanObjects) {
+		List<String> loans = loanObjects.stream().map(loan -> loan.toString()).collect(Collectors.toList());;
+		int selection = promptOptions(loans);
+		if (selection == -1) {
+			return new Loan(-1, -1, -1, null, null, null);
+		} else if (selection == 0) {
+			return new Loan(0, 0, 0, null, null, null);
+		}
+		return loanObjects.get(selection - 1);
+	}
+
 	public Borrower getBorrowerSelection(List<Borrower> borrowerObjects) {
 		List<String> borrowers = borrowerObjects.stream().map(borrower -> borrower.toString()).collect(Collectors.toList());;
 		int selection = promptOptions(borrowers);
@@ -755,6 +759,23 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 		} while (true);
 	}
 	public boolean overrideDueDate() {
+		printSubMenu("Select a Loan to Update");
+		Loan loan = getLoanSelection(service.getLoans(null));
+		if (loan.getCardNo() == -1) {
+			return false;
+		} else if (loan.getCardNo() == 0) {
+			return true;
+		}
+
+		System.out.println("How long would you like to extend the due date?\nNumber of days: ");
+		String userInput = scan.nextLine();
+		int numDays;
+		try {
+			numDays = Integer.parseInt(userInput);
+			service.overrideDueDate(loan, numDays);
+		} catch (Exception e) {
+			System.out.println(Constants.INCORRECT_INPUT);
+		}
 		return true;
 	}
 

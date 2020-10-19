@@ -2,11 +2,15 @@ package com.ss.lms.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.ss.lms.constants.Constants;
 import com.ss.lms.dao.AuthorDAO;
 import com.ss.lms.dao.GenreDAO;
+import com.ss.lms.dao.LoanDAO;
 import com.ss.lms.dao.PublisherDAO;
 import com.ss.lms.dao.BookDAO;
 import com.ss.lms.dao.BorrowerDAO;
@@ -16,6 +20,7 @@ import com.ss.lms.entity.Book;
 import com.ss.lms.entity.Borrower;
 import com.ss.lms.entity.Branch;
 import com.ss.lms.entity.Genre;
+import com.ss.lms.entity.Loan;
 import com.ss.lms.entity.Publisher;
 
 public class AdministratorService extends BaseUserService {
@@ -409,7 +414,54 @@ public class AdministratorService extends BaseUserService {
 		  return null;
 	  }
 	}
-	
+
+	public boolean overrideDueDate(Loan loan, Integer extension) throws SQLException {
+		Date date = new Date(loan.getDueDate().getTime());
+    Calendar c = Calendar.getInstance();
+    c.setTime(date);
+    c.add(Calendar.DATE, extension);
+    Date due = c.getTime();
+
+		Timestamp dueDate = new Timestamp(due.getTime());
+		loan.setDueDate(dueDate);
+
+    Connection conn = null;
+    try { 
+    	conn = conUtil.getConnection();
+    	LoanDAO loanDAO = new LoanDAO(conn);
+    	loanDAO.extendDueDate(loan);
+			conn.commit();
+			System.out.println(Constants.getColor("green", "\nSuccessfully extended due date.\n"));
+			return true;
+    } catch (ClassNotFoundException | SQLException e) {
+    	e.printStackTrace();
+		if (conn != null) {
+			conn.rollback();
+		}
+		System.out.println(Constants.getColor("red", "\nFailed to extend due date.\n"));
+		return false;
+    } finally {
+    	if (conn != null) {
+    		conn.close();
+    	}
+    }
+  }
+
+	public List<Loan> getLoans(String searchString) {
+	  try(Connection conn = conUtil.getConnection()) {
+			LoanDAO loanDAO = new LoanDAO(conn);
+			
+		  if (searchString != null) {
+			  return loanDAO.readAllLoans();
+		  } else {
+			  return loanDAO.readAllLoans();
+		  }
+	  } catch (ClassNotFoundException | SQLException e) {
+		  e.printStackTrace();
+		  return null;
+	  }
+	}
+
 	public List<Publisher> getPublishers(String searchString) {
 	  try(Connection conn = conUtil.getConnection()) {
 			PublisherDAO pdao = new PublisherDAO(conn);

@@ -53,7 +53,6 @@ public class BorrowerDAO extends BaseDAO<Borrower> {
 			borrower.setBooks(books);
 			borrowers.add(borrower);
 		}
-		System.out.println(borrowers.size());
 		return borrowers;
 	}
 }

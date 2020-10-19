@@ -1,6 +1,9 @@
 package com.ss.lms.entity;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
+import com.ss.lms.constants.Constants;
 
 public class Loan {
 	private Integer bookId;
@@ -10,13 +13,23 @@ public class Loan {
 	private Timestamp dueDate;
 	private Timestamp dateIn;
 
-	public Loan(Integer bookId, Integer branchId, Integer cardNo, Timestamp dateOut, Timestamp dueDate) {
+	private Book book;
+	private Borrower borrower;
+	private Branch branch;
+
+	public Loan(Integer bookId, Integer branchId, Integer cardNo, Timestamp dateOut, Timestamp dueDate, Timestamp dateIn) {
 		this.bookId = bookId;
 		this.branchId = branchId;
 		this.cardNo = cardNo;
 		this.dateOut = dateOut;
 		this.dueDate = dueDate;
-		this.dateIn = null;
+		this.dateIn = dateIn;
+	}
+
+	@Override
+	public String toString() {
+		return "\"" + book.getTitle() + "\" borrowed by " + borrower.getName() + " from "
+			+ branch.getBranchName() + " (" + Constants.getColor("red", new SimpleDateFormat("MM/dd/yyyy").format(dueDate)) + ")"; 
 	}
 
 	public Integer getBookId() {
@@ -65,6 +78,30 @@ public class Loan {
 
 	public void setDateIn(Timestamp dateIn) {
 		this.dateIn = dateIn;
+	}
+
+	public Book getBook() {
+		return book;
+	}
+
+	public void setBook(Book book) {
+		this.book = book;
+	}
+
+	public Borrower getBorrower() {
+		return borrower;
+	}
+
+	public void setBorrower(Borrower borrower) {
+		this.borrower = borrower;
+	}
+
+	public Branch getBranch() {
+		return branch;
+	}
+
+	public void setBranch(Branch branch) {
+		this.branch = branch;
 	}
 
 }
