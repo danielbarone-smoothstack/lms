@@ -6,14 +6,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ss.lms.entity.Author;
 import com.ss.lms.entity.Book;
 import com.ss.lms.entity.Branch;
 
-public class BranchDAO extends BaseDAO {
+public class BranchDAO extends BaseDAO<Branch> {
 
 	public BranchDAO(Connection conn) {
 		super(conn);
+	}
+
+	public void addBranch(Branch branch) throws ClassNotFoundException, SQLException {
+		save("INSERT INTO tbl_library_branch (branchName, branchAddress) VALUES (?,?)", 
+			new Object[] { branch.getBranchName(), branch.getBranchAddress() });
+	}
+
+	public void addBookCopies(Branch branch, Integer bookId, Integer noOfCopies) throws SQLException, ClassNotFoundException {
+		save("INSERT INTO tbl_book_copies (bookId, branchId, noOfCopies) VALUES (?,?,?)",
+			new Object[] { bookId, branch.getBranchId(), noOfCopies }
+		);
 	}
 
 	public void updateNoOfCopies(Branch branch, Integer bookId, Integer noOfCopies) throws SQLException, ClassNotFoundException {
@@ -26,6 +36,10 @@ public class BranchDAO extends BaseDAO {
 		save("UPDATE tbl_library_branch SET branchAddress = ?, branchName = ? WHERE branchId = ?",
 			new Object[] { branch.getBranchAddress(), branch.getBranchName(), branch.getBranchId() }
 		);
+	}
+
+	public void deleteBranch(Branch branch) throws ClassNotFoundException, SQLException {
+		save("DELETE FROM tbl_library_branch WHERE branchId = ?", new Object[] { branch.getBranchId() });
 	}
 
 	public List<Branch> readAllBranches() throws SQLException, ClassNotFoundException {

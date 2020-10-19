@@ -9,18 +9,19 @@ import java.util.stream.Collectors;
 import com.ss.lms.constants.Constants;
 import com.ss.lms.entity.Book;
 import com.ss.lms.entity.Branch;
-import com.ss.lms.service.BaseUserService;
 
 public abstract class BaseUserMenu {
 	
 	private String userType;
-	protected HashMap<Integer, Callable> options;
+	private Integer menu;
+	protected HashMap<Integer, Callable<Boolean>> options;
 	protected static Scanner scan;
 	
-	BaseUserMenu(String userType, Scanner scan) {
+	BaseUserMenu(String userType, Scanner scan, Integer menu) {
 		this.userType = Constants.getColor("header", userType);
-		this.options = new HashMap<Integer, Callable>();
-		this.scan = scan;
+		this.options = new HashMap<Integer, Callable<Boolean>>();
+		BaseUserMenu.scan = scan;
+		this.menu = menu;
 	}
 
 	public abstract boolean driver();
@@ -50,6 +51,14 @@ public abstract class BaseUserMenu {
 			return new Book(0, null);
 		}
 		return bookObjects.get(selection - 1);
+	}
+
+	public void setMenu(Integer menu) {
+		this.menu = menu;
+	}
+
+	public Integer getMenu() {
+		return menu;
 	}
 
 	private void printGetSelection() {
@@ -114,18 +123,16 @@ public abstract class BaseUserMenu {
 			if (selection == prevMenuOption) {
 				System.out.println(Constants.RETURNING);
 				return 0;
-
 			// Proceed w/ a function
 			} else if (selection >= 1 && selection < options.size() + 2) {
 				return selection;
-			
 			} else {
 				System.out.println(Constants.INCORRECT_INPUT);
 			}
 		} while (true);
 	}
 
-	public boolean promptOptions(String[] options, HashMap<Integer, Callable> optionFuncs) {
+	public boolean promptOptions(String[] options, HashMap<Integer, Callable<Boolean>> optionFuncs) {
 
 		do {
 			int option = 1;
@@ -164,7 +171,7 @@ public abstract class BaseUserMenu {
 				return true;
 			// Proceed w/ a function
 			} else if (selection >= 1 && selection < options.length + 2) {
-				Callable<?> func = optionFuncs.get(selection);
+				Callable<Boolean> func = optionFuncs.get(selection);
 				boolean contPrompting;
 				try {
 					contPrompting = (boolean)func.call();

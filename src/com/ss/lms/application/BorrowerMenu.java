@@ -1,10 +1,7 @@
 package com.ss.lms.application;
 
-import java.sql.SQLException;
-import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
 
 import com.ss.lms.constants.Constants;
 import com.ss.lms.service.BorrowerService;
@@ -12,19 +9,24 @@ import com.ss.lms.entity.Book;
 import com.ss.lms.entity.Borrower;
 import com.ss.lms.entity.Branch;
 
-public class BorrowerMenu extends BaseUserMenu implements Callable {
+public class BorrowerMenu extends BaseUserMenu implements Callable<Boolean> {
 
 	private BorrowerService service;
 	private Borrower borrower;
-	private Integer menu;
 
-	BorrowerMenu(Scanner scan) {
-		super("Borrower", scan);
-		menu = 0;
+	BorrowerMenu(Scanner scan, Integer menu) {
+		super("Borrower", scan, menu);
+		this.service = new BorrowerService();
 	}
 
-	public Object call() throws Exception {
-		switch(menu) {
+	BorrowerMenu(Scanner scan, Integer menu, BorrowerService service, Borrower borrower) {
+		super("Borrower", scan, menu);
+		this.service = service;
+		this.borrower = borrower;
+	}
+
+	public Boolean call() throws Exception {
+		switch(getMenu()) {
 			case 1:
 				return checkoutBook();
 			case 2:
@@ -123,37 +125,21 @@ public class BorrowerMenu extends BaseUserMenu implements Callable {
 		} while (true);
 	}
 
-	public void setBorrower(Borrower borrower) {
-		this.borrower = borrower;
-	}
-
 	public void setService(BorrowerService service) {
 		this.service = service;
-	}
-	
-	public void setMenu(Integer menu) {
-		this.menu = menu;
 	}
 
 	@Override
 	public boolean driver() {
 		printMenuHeader();
-
-		service = new BorrowerService();
+		
 		borrower = getBorrower();
-
 		if (borrower.getCardNo() == -1) {
 			return false;
 		}
 
-		BorrowerMenu chkBook = new BorrowerMenu(scan);
-		chkBook.setBorrower(borrower);
-		chkBook.setService(service);
-		chkBook.setMenu(1); 
-		BorrowerMenu retBook =  new BorrowerMenu(scan);
-		retBook.setBorrower(borrower);
-		retBook.setService(service);
-		retBook.setMenu(2);
+		BorrowerMenu chkBook = new BorrowerMenu(scan, 1, service, borrower);
+		BorrowerMenu retBook =  new BorrowerMenu(scan, 2, service, borrower);
 
 		options.put(1, chkBook);
 		options.put(2, retBook);

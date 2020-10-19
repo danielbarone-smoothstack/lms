@@ -32,4 +32,3 @@ public class LoanDAO extends BaseDAO<Loan> {
 		return null;
 	}
 }
-

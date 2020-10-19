@@ -12,6 +12,11 @@ public class Author {
 		this.authorId = authorId;
 		this.authorName = authorName;
 	}
+
+	@Override
+	public String toString() {
+		return authorName;
+	}
 	
 	public Integer getAuthorId() {
 		return authorId;

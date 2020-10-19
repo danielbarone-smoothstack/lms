@@ -9,6 +9,7 @@ import java.util.List;
 import com.ss.lms.entity.Book;
 import com.ss.lms.entity.Borrower;
 import com.ss.lms.entity.Branch;
+import com.ss.lms.entity.Publisher;
 
 public class BookDAO extends BaseDAO<Book>{
 
@@ -17,11 +18,11 @@ public class BookDAO extends BaseDAO<Book>{
 	}
 
 	public void addBook(Book book) throws ClassNotFoundException, SQLException {
-		save("INSERT INTO tbl_book (title) VALUES (?)", new Object[] { book.getTitle() });
+		save("INSERT INTO tbl_book (title, pubId) VALUES (?, ?)", new Object[] { book.getTitle(), book.getPublisher().getPublisherId() });
 	}
 	
 	public Integer addBookWithPk(Book book) throws ClassNotFoundException, SQLException {
-		return saveWithPk("INSERT INTO tbl_book (title) VALUES (?)", new Object[] { book.getTitle() });
+		return saveWithPk("INSERT INTO tbl_book (title, pubId) VALUES (?, ?)", new Object[] { book.getTitle(), book.getPublisher().getPublisherId() });
 	}
 
 	public void updateBook(Book book) throws ClassNotFoundException, SQLException {
@@ -52,17 +53,27 @@ public class BookDAO extends BaseDAO<Book>{
 	public List<Book> extractData(ResultSet rs) throws SQLException, ClassNotFoundException {
 		List<Book> books = new ArrayList<>();
 		AuthorDAO adao = new AuthorDAO(conn);
+		GenreDAO gdao = new GenreDAO(conn);
+		PublisherDAO pdao = new PublisherDAO(conn);
+
 		while (rs.next()) {
 			Book b = new Book(rs.getInt("bookId"), rs.getString("title"));
+
 			b.setAuthors(adao.read("select * from tbl_author where authorId IN (select authorId from tbl_book_authors where bookId = ?)", new Object[] {b.getBookId()}));
-			//b.setGenres()		
+			b.setGenres(gdao.read("select * from tbl_genre where genre_id IN (select genre_id from tbl_book_genres where bookId = ?)", new Object[] {b.getBookId()}));
+			List<Publisher> publisher = pdao.read(
+				"SELECT * FROM tbl_publisher WHERE publisherId IN (SELECT pubId FROM tbl_book WHERE bookId= ?)",
+				new Object[] {b.getBookId()}
+			);
+			if (publisher.size() > 0) {
+				b.setPublisher(publisher.get(0));
+			}
+			
 			int noOfCopies;
 			try {
 				noOfCopies = rs.getInt("noOfCopies");
 				b.setNoOfCopies(noOfCopies);
-			} catch (Exception e) {
-//				System.out.println("noOfCopies not present.");
-			}
+			} catch (Exception e) {/**/}
 				
 			books.add(b);
 		}

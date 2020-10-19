@@ -9,17 +9,14 @@ public class Driver {
 
 	public static void entryPrompt(Scanner scan) {
 		HashMap<Integer, BaseUserMenu> userTypes = new HashMap<Integer, BaseUserMenu>();
-		
-		userTypes.put(1, new LibrarianMenu(scan));
-		// userTypes.put(2, new AdministratorMenu());
-		userTypes.put(2, new BorrowerMenu(scan));
+		userTypes.put(1, new LibrarianMenu(scan, 0));
+		userTypes.put(2, new AdministratorMenu(scan, 0));
+		userTypes.put(3, new BorrowerMenu(scan, 0));
 
 		boolean exitLMS = false;
 		do {
-			
 			BaseUserMenu.printMainMenu();
 			String userType = scan.nextLine();
-			
 			int selection;
 			try {
 				selection = Integer.parseInt(userType);
@@ -39,7 +36,6 @@ public class Driver {
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
 		entryPrompt(scan);
-		
 		System.out.println(Constants.QUIT_MESSAGE);
 		scan.close();
 	}

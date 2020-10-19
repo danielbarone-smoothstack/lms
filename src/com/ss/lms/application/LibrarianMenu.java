@@ -9,19 +9,24 @@ import com.ss.lms.entity.Book;
 import com.ss.lms.entity.Branch;
 import com.ss.lms.service.LibrarianService;
 
-public class LibrarianMenu extends BaseUserMenu implements Callable {
+public class LibrarianMenu extends BaseUserMenu implements Callable<Boolean> {
 
 	private LibrarianService service;
-	private Integer menu;
 	private Branch branch;
 
-	LibrarianMenu(Scanner scan) {
-		super("Librarian", scan);
-		menu = 0;
+	LibrarianMenu(Scanner scan, Integer menu) {
+		super("Librarian", scan, menu);
+		this.service = new LibrarianService();
 	}
 
-	public Object call() throws Exception {
-		switch(menu) {
+	LibrarianMenu(Scanner scan, Integer menu, LibrarianService service, Branch branch) {
+		super("Librarian", scan, menu);
+		this.service = service;
+		this.branch = branch;
+	}
+
+	public Boolean call() throws Exception {
+		switch(getMenu()) {
 			case 1:
 				return editLibrary();
 			case 2:
@@ -99,10 +104,6 @@ public class LibrarianMenu extends BaseUserMenu implements Callable {
 		this.branch = branch;
 	}
 
-	public void setMenu(Integer menu) {
-		this.menu = menu;
-	}
-
 	public void setService(LibrarianService service) {
 		this.service = service;
 	}
@@ -122,16 +123,10 @@ public class LibrarianMenu extends BaseUserMenu implements Callable {
 				return true;
 			}
 
-			LibrarianMenu editLibrary = new LibrarianMenu(scan);
-			editLibrary.setBranch(branch);
-			editLibrary.setService(service);
-			editLibrary.setMenu(1);
-			LibrarianMenu addCopies = new LibrarianMenu(scan);
-			addCopies.setBranch(branch);
-			addCopies.setService(service);
-			addCopies.setMenu(2);
+			LibrarianMenu editLibrary = new LibrarianMenu(scan, 1, service, branch);
+			LibrarianMenu addCopies = new LibrarianMenu(scan, 2, service, branch);
 
-			options = new HashMap<Integer, Callable>();
+			options = new HashMap<Integer, Callable<Boolean>>();
 			options.put(1, editLibrary);
 			options.put(2, addCopies);
 
@@ -143,7 +138,6 @@ public class LibrarianMenu extends BaseUserMenu implements Callable {
 	@Override
 	public boolean driver() {
 		printMenuHeader();
-		service = new LibrarianService();
 		options.put(1, this);
 		return promptOptions(Constants.LIB1_OPTIONS, options);
 	}

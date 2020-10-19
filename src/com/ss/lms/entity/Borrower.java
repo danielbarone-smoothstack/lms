@@ -16,6 +16,11 @@ public class Borrower {
     this.phone = phone;
   }
 
+  @Override
+	public String toString() {
+    return name;
+  }
+
   public Integer getCardNo() {
     return cardNo;
   }

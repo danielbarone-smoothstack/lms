@@ -31,8 +31,8 @@ public final class Constants {
 		}
 	}
 
-	public static final String INCORRECT_INPUT = getColor("blue",
-			"Invalid selection. Try again or type 'quit' if you wish to quit.\n");
+	public static final String INCORRECT_INPUT = getColor("red",
+			"\nInvalid selection. Try again or type 'quit' if you wish to quit.\n");
 	public static final String QUIT_MESSAGE = getColor("green", "\nGood Bye.\n");
 	public static final String PREVIOUS_MENU = getColor("blue", "Quit to previous menu");
 	public static final String MAKE_SELECTION = "Please make a selection: ";
@@ -45,7 +45,9 @@ public final class Constants {
 	// CRUD
 	public static final String SUCCESSFUL_UPDATE = getColor("green", "\nSuccessfully updated.\n");
 	public static final String FAILED_UPDATE = getColor("green", "\nFailed to update.\n");
-
+	public static final String SUCCESSFUL_DELETE = getColor("green", "\nSuccessfully deleted.\n");
+	public static final String FAILED_DELETE = getColor("green", "\nFailed to delete.\n");
+	
 	// driver
 	public static final String WELCOME_MESSAGE = getColor("header",
 			"Welcome to the GCIT Library Management\nSystem. Which category of user are you?");
@@ -83,33 +85,67 @@ public final class Constants {
 
 
 	// administrator
+	//// menus
+	public static final String MENU_ONE = "Book and Author Menu";
+	public static final String MENU_TWO = "Genre Menu";
+	public static final String MENU_THREE = "Publisher Menu";
+	public static final String MENU_FOUR = "Library Branch Menu";
+	public static final String MENU_FIVE = "Borrower Menu";
+	public static final String MENU_SIX = "XXXX";
 	//// driver function
-	public static final String AUD_BOOK_AND_AUTHOR = getColor("blue", "Add/Update/Delete Book and Author");
-	public static final String AUD_PUBLISHERS = getColor("blue", "Add/Update/Delete Publishers");
-	public static final String AUD_LIBRARY_BRANCHES = getColor("blue", "Add/Update/Delete Library Branches");
-	public static final String AUD_BORROWERS = getColor("blue", "Add/Update/Delete Borrowers");
+	public static final String AUD_BOOK_AND_AUTHOR = getColor("blue", "Add/Update/Delete/Read Book and Author");
+	public static final String AUD_GENRES = getColor("blue", "Add/Update/Delete/Read Genre");
+	public static final String AUD_PUBLISHERS = getColor("blue", "Add/Update/Delete/Read Publishers");
+	public static final String AUD_LIBRARY_BRANCHES = getColor("blue", "Add/Update/Delete/Read Library Branches");
+	public static final String AUD_BORROWERS = getColor("blue", "Add/Update/Delete/Read Borrowers");
 	public static final String OVERRIDE_DUEDATE = getColor("blue", "Override Due Date for a Book Loan");
-	public static final String[] MAIN_ADMIN_OPTIONS = new String[] {AUD_BOOK_AND_AUTHOR, AUD_PUBLISHERS, AUD_LIBRARY_BRANCHES, AUD_BORROWERS, OVERRIDE_DUEDATE};
+	public static final String[] MAIN_ADMIN_OPTIONS = new String[] {AUD_BOOK_AND_AUTHOR, AUD_GENRES, AUD_PUBLISHERS, AUD_LIBRARY_BRANCHES, AUD_BORROWERS, OVERRIDE_DUEDATE};
 	//// aud book and author
 	public static final String ADD_BOOK_AND_AUTHOR = getColor("blue", "Add Book and Author");
 	public static final String UPDATE_BOOK_AND_AUTHOR = getColor("blue", "Update Book and Author");
 	public static final String DELETE_BOOK_AND_AUTHOR = getColor("blue", "Delete Book and Author");
-	public static final String[] ADMIN_BOOK_AND_AUTHOR_OPTIONS = new String[] {ADD_BOOK_AND_AUTHOR,UPDATE_BOOK_AND_AUTHOR,DELETE_BOOK_AND_AUTHOR};
+	public static final String READ_BOOK_AND_AUTHOR = getColor("blue", "Read Books and Authors");
+	public static final String[] ADMIN_BOOK_AND_AUTHOR_OPTIONS = new String[] {ADD_BOOK_AND_AUTHOR,UPDATE_BOOK_AND_AUTHOR,DELETE_BOOK_AND_AUTHOR, READ_BOOK_AND_AUTHOR};
 	public static final String ADD_MORE_AUTHORS = getColor("header", "Add another author?\n")+"1) "+getColor("blue","Yes\n")+"2) "+getColor("blue","No");
+	public static final String ADD_BY_BRANCH = getColor("blue", "Add by branch");
+	public static final String ADD_WOUT_BRANCH = getColor("blue", "Add without specifying a branch");
+	public static final String[] ADD_OPTIONS = new String[] { ADD_BY_BRANCH, ADD_WOUT_BRANCH};
+
+	//// aud genre
+	public static final String ADD_GENRE = getColor("blue", "Add a genre");
+	public static final String UPDATE_GENRE = getColor("blue", "Update a genre");
+	public static final String DELETE_GENRE = getColor("blue", "Delete a genre");
+	public static final String READ_GENRES = getColor("blue", "Read genres");
+	public static final String[] GENRE_OPTIONS = new String[] {ADD_GENRE, UPDATE_GENRE, DELETE_GENRE, READ_GENRES};
+	public static final String NEW_GENRE_NAME = "Please enter new genre name or enter N/A for no change: ";
+	
 	//// aud branches
 	public static final String NOT_APPLICABLE = "N/A";
 	public static final String ADD_BRANCH = getColor("blue", "Add a branch");
 	public static final String UPDATE_BRANCH = getColor("blue", "Update a branch");
 	public static final String DELETE_FROM_BRANCH = getColor("blue", "Delete a branch");
-	public static final String[] ADMIN_BRANCH_OPTIONS = new String[] {ADD_BRANCH,UPDATE_BRANCH,DELETE_FROM_BRANCH};
+	public static final String READ_BRANCHES = getColor("blue", "Read branches");
+	public static final String[] ADMIN_BRANCH_OPTIONS = new String[] {ADD_BRANCH,UPDATE_BRANCH,DELETE_FROM_BRANCH, READ_BRANCHES};
+
 	// aud publishers
 	public static final String ADD_PUBLISHER = getColor("blue", "Add a publisher");
 	public static final String UPDATE_PUBLISHER = getColor("blue", "Update a publisher");
 	public static final String DELETE_PUBLISHER = getColor("blue", "Delete a publisher");
-	public static final String[] PUBLISHER_OPTIONS = new String[] {ADD_PUBLISHER, UPDATE_PUBLISHER, DELETE_PUBLISHER};
+	public static final String READ_PUBLISHERS = getColor("blue", "Read publishers");
+	public static final String[] PUBLISHER_OPTIONS = new String[] {ADD_PUBLISHER, UPDATE_PUBLISHER, DELETE_PUBLISHER, READ_PUBLISHERS};
+	public static final String NEW_PUBLISHER_NAME = "Please enter new publisher name or enter N/A for no change: ";
+	public static final String NEW_PUBLISHER_ADDRESS = "Please enter new address name or enter N/A for no change: ";
+	public static final String NEW_PUBLISHER_PHONE = "Please enter new publisher phone or enter N/A for no change: ";
+
   // aud borrowers
 	public static final String ADD_BORROWER = getColor("blue", "Add a Borrower");
 	public static final String UPDATE_BORROWER = getColor("blue", "Update a Borrower");
 	public static final String DELETE_BORROWER = getColor("blue", "Delete a Borrower");
-	public static final String[] AUD_BORROWER_OPTIONS = new String[] {ADD_BORROWER, UPDATE_BORROWER, DELETE_BORROWER};
+	public static final String READ_BORROWERS = getColor("blue", "Read a Borrowers");
+	public static final String[] AUD_BORROWER_OPTIONS = new String[] {ADD_BORROWER, UPDATE_BORROWER, DELETE_BORROWER, READ_BORROWERS};
+	
+	public static final String NEW_BORROWER_NAME = "Please enter new borrower name or enter N/A for no change: ";
+	public static final String NEW_BORROWER_ADDRESS = "Please enter new address or enter N/A for no change: ";
+	public static final String NEW_BORROWER_PHONE = "Please enter new borrower phone or enter N/A for no change: ";
+
 }
