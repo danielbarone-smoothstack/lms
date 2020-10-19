@@ -1,5 +1,5 @@
 package com.ss.lms.service;
 
-public class LibrarianService {
+public class LibrarianService extends BaseUserService {
 
 }

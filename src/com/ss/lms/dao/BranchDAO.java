@@ -40,7 +40,6 @@ public class BranchDAO extends BaseDAO {
 							new Object[] { book.getBookId(), branch.getBranchId() }
 					).get(0).getNoOfCopies()
 				);
-				System.out.println(book.getNoOfCopies());
 			}
 
 			branch.setBooks(books);

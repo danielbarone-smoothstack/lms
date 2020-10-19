@@ -1,5 +1,6 @@
 package com.ss.lms.application;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
@@ -11,22 +12,32 @@ import com.ss.lms.entity.Book;
 import com.ss.lms.entity.Borrower;
 import com.ss.lms.entity.Branch;
 
-class CheckOutBook implements Callable { 
+public class BorrowerMenu extends BaseUserMenu implements Callable {
 
-	BorrowerService bService;
-	Scanner scan;
-	Borrower borrower;
+	private BorrowerService service;
+	private Borrower borrower;
+	private Integer menu;
 
-	CheckOutBook(Scanner scan, BorrowerService bService, Borrower borrower) {
-		this.scan = scan;
-		this.bService = bService;
-		this.borrower = borrower;
+	BorrowerMenu(Scanner scan) {
+		super("Borrower", scan);
+		menu = 0;
 	}
 
-	public Object call() throws Exception { 
+	public Object call() throws Exception {
+		switch(menu) {
+			case 1:
+				return checkoutBook();
+			case 2:
+				return returnBook();
+			default:
+				return true;
+		}
+	}
+
+	public boolean checkoutBook() throws Exception {
 		// Get branch selection
 		System.out.println(Constants.CHECKOUT_BRANCH);
-		Branch branch = BaseUserMenu.getBranchSelection(bService);
+		Branch branch = getBranchSelection(service);
 		// Exit program
 		if (branch.getBranchId() == -1) {
 			return false;
@@ -37,7 +48,7 @@ class CheckOutBook implements Callable {
 
 		// Get book selection
 		System.out.println(Constants.CHECKOUT_BOOK);
-		Book book = BaseUserMenu.getBookSelection(branch);
+		Book book = getBookSelection(branch);
 		// Exit program
 		if (book.getBookId() == -1) {
 			return false;
@@ -59,25 +70,12 @@ class CheckOutBook implements Callable {
 		}
 
 		// checkout the book
-		return bService.checkoutBook(book.getBookId(), branch.getBranchId(), borrower.getCardNo()); 
-	}
-} 
-
-class ReturnBook implements Callable { 
-
-	BorrowerService bService;
-	Scanner scan;
-	Borrower borrower;
-
-	ReturnBook(Scanner scan, BorrowerService bService, Borrower borrower) {
-		this.scan = scan;
-		this.bService = bService;
-		this.borrower = borrower;
+		return service.checkoutBook(book.getBookId(), branch.getBranchId(), borrower.getCardNo()); 
 	}
 
-	public Object call() throws Exception { 
+	public boolean returnBook() throws Exception {
 		System.out.println(Constants.RETURN_BRANCH);
-		Branch branch = BaseUserMenu.getBranchSelection(bService);
+		Branch branch = getBranchSelection(service);
 		
 		// Exit program if user typed 'quit'
 		if (branch.getBranchId() == -1) {
@@ -89,10 +87,10 @@ class ReturnBook implements Callable {
 
 		// Get list of book options to display to user
 		System.out.println(Constants.RETURN_BOOK);
-		List<Book> bookObjs = bService.getBookSelection(branch, borrower);
+		List<Book> bookObjs = service.getBookSelection(branch, borrower);
 		List<String> books = bookObjs.stream().map(book -> book.toString()).collect(Collectors.toList());
 
-		int selection = BaseUserMenu.promptOptions(books);
+		int selection = promptOptions(books);
 		// if user typed quit, exit program
 		if (selection == -1) {
 			return false;
@@ -105,18 +103,7 @@ class ReturnBook implements Callable {
 		Book book = bookObjs.get(selection - 1);
 		
 		// Perform the return book functionality
-		return bService.returnBook(book.getBookId(), branch.getBranchId(), borrower.getCardNo()); 
-	}
-}
-
-public class BorrowerMenu extends BaseUserMenu {
-
-	private BorrowerService bService;
-	private Callable checkoutBook;
-	private Callable returnBook;
-
-	BorrowerMenu(Scanner scan) {
-		super("Borrower", scan);
+		return service.returnBook(book.getBookId(), branch.getBranchId(), borrower.getCardNo()); 
 	}
 
 	public Borrower getBorrower() {
@@ -127,7 +114,7 @@ public class BorrowerMenu extends BaseUserMenu {
 			selection = scan.nextLine();
 			try {
 				cardNo = Integer.parseInt(selection);
-				Borrower borrower = bService.checkCardNoValid(cardNo);
+				Borrower borrower = service.checkCardNoValid(cardNo);
 				if (borrower.getCardNo() != -1) {
 					return borrower;
 				}
@@ -140,21 +127,40 @@ public class BorrowerMenu extends BaseUserMenu {
 		} while (true);
 	}
 
-	public boolean driver() {
-		bService = new BorrowerService();
+	public void setBorrower(Borrower borrower) {
+		this.borrower = borrower;
+	}
 
+	public void setService(BorrowerService service) {
+		this.service = service;
+	}
+	
+	public void setMenu(Integer menu) {
+		this.menu = menu;
+	}
+
+	@Override
+	public boolean driver() {
 		printMenuHeader();
 
-		Borrower borrower = getBorrower();
+		service = new BorrowerService();
+		borrower = getBorrower();
+
 		if (borrower.getCardNo() == -1) {
 			return false;
 		}
 
-		checkoutBook = new CheckOutBook(scan, bService, borrower);
-		returnBook = new ReturnBook(scan, bService, borrower);
+		BorrowerMenu chkBook = new BorrowerMenu(scan);
+		chkBook.setBorrower(borrower);
+		chkBook.setService(service);
+		chkBook.setMenu(1); 
+		BorrowerMenu retBook =  new BorrowerMenu(scan);
+		retBook.setBorrower(borrower);
+		retBook.setService(service);
+		retBook.setMenu(2);
 
-		options.put(1, checkoutBook);
-		options.put(2, returnBook);
+		options.put(1, chkBook);
+		options.put(2, retBook);
 
 		return promptOptions(Constants.MAIN_BORROWER_OPTIONS, options);
 	}

@@ -54,6 +54,7 @@ public final class Constants {
 	public static final String UPDATE_LIBRARY = getColor("blue", "Update the details of the Library");
 	public static final String ADD_COPIES = getColor("blue", "Add Copies of a Book to the Branch");
 	public static final String[] LIB3_OPTIONS = new String[] {UPDATE_LIBRARY, ADD_COPIES};
+	public static final String SELECT_BRANCH = "Select a Branch\n" + LINE_BREAK;
 
   // borrower
 	public static final String CARD_NUMBER_PROMPT = getColor("blue", "Enter your card number: ");

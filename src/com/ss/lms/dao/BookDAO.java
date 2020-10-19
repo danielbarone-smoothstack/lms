@@ -61,7 +61,7 @@ public class BookDAO extends BaseDAO<Book>{
 				noOfCopies = rs.getInt("noOfCopies");
 				b.setNoOfCopies(noOfCopies);
 			} catch (Exception e) {
-				System.out.println("noOfCopies not present.");
+//				System.out.println("noOfCopies not present.");
 			}
 				
 			books.add(b);

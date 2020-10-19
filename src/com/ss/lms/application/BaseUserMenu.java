@@ -25,7 +25,7 @@ public abstract class BaseUserMenu {
 
 	public abstract boolean driver();
 
-	public static Branch getBranchSelection(BaseUserService bService) {
+	public Branch getBranchSelection(BaseUserService bService) {
 		// Get branch list w/ branch name and address
 		List<Branch> branches = bService.getBranches(null);
 		List<String> branchNames = branches.stream().map(branch -> branch.toString()).collect(Collectors.toList());;
@@ -41,7 +41,7 @@ public abstract class BaseUserMenu {
 		return branches.get(selection - 1);
 	}
 
-	public static Book getBookSelection(Branch branch) {
+	public Book getBookSelection(Branch branch) {
 		List<Book> bookObjs = branch.getBooks();
 		List<String> books = bookObjs.stream().map(book -> book.toString()).collect(Collectors.toList());
 
