@@ -47,9 +47,6 @@ class CheckOutBook implements Callable {
 		}
 
 		// Check num copies > 0
-		System.out.println(book.getBookId());
-		System.out.println(book.getTitle());
-		System.out.println(book.getNoOfCopies());
 		if (book.getNoOfCopies() == 0) {
 			System.out.println(Constants.NO_COPIES);
 			return true;
@@ -77,30 +74,37 @@ class ReturnBook implements Callable {
 		this.bService = bService;
 		this.borrower = borrower;
 	}
+
 	public Object call() throws Exception { 
 		System.out.println(Constants.RETURN_BRANCH);
 		Branch branch = BaseUserMenu.getBranchSelection(bService);
-		// Exit program
+		
+		// Exit program if user typed 'quit'
 		if (branch.getBranchId() == -1) {
 			return false;
-			// Return to previous menu
+			// Return to previous menu if user selected prev menu opt
 		} else if(branch.getBranchId() == 0) {
 			return true;
 		}
 
+		// Get list of book options to display to user
 		System.out.println(Constants.RETURN_BOOK);
 		List<Book> bookObjs = bService.getBookSelection(branch, borrower);
 		List<String> books = bookObjs.stream().map(book -> book.toString()).collect(Collectors.toList());
 
 		int selection = BaseUserMenu.promptOptions(books);
+		// if user typed quit, exit program
 		if (selection == -1) {
 			return false;
+		// Return to prev menu if invalid or selected prev menu
 		} else if (selection == 0) {
 			return true;
 		}
 
+		// Get the user's book selection
 		Book book = bookObjs.get(selection - 1);
-
+		
+		// Perform the return book functionality
 		return bService.returnBook(book.getBookId(), branch.getBranchId(), borrower.getCardNo()); 
 	}
 }
