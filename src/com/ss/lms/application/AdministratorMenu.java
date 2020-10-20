@@ -214,7 +214,6 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					
 				case 2: /* UPDATE */
 					printSubMenu("Update a Book and Author");
-					
 					break;
 				case 3: /* DELETE */
 					printSubMenu("Delete a Book and Author");
