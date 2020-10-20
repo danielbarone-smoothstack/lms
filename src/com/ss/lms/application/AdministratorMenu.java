@@ -163,6 +163,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 		} while (doneUpdating == false);
 		return updatedGenreList;
 	}
+
 	public List<Author> updateAuthors(Book book) {
 		List<Author> updatedAuthorList;
 		if (book.getAuthors() == null) {
@@ -367,13 +368,17 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					break;
 				case 4: /* READ */
 					printSubMenu("Read Books and Authors");
-					// service.readBook();
+					List<Book> allBooks = service.getBooks(null);
+					for (Book bk : allBooks) {
+						System.out.println(bk.toString());
+					}
 					break;
 				default:
 					break;
 			}
 		} while (true);
 	}
+
 	public boolean audrGenre() {
 		int selection;
 		do {
@@ -474,6 +479,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 
 		} while (true);
 	}
+
 	public boolean audrPublisher() {
 		int selection;
 		do {
@@ -625,6 +631,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 			}
 		} while(true);
 	}
+
 	public boolean audrLibraryBranch() {
 		int selection;
 		do {
@@ -904,6 +911,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 			}
 		} while (true);
 	}
+	
 	public boolean overrideDueDate() {
 		printSubMenu("Select a Loan to Update");
 		Loan loan = getLoanSelection(service.getLoans(null));

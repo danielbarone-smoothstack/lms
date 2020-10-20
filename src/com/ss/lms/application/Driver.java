@@ -9,6 +9,7 @@ public class Driver {
 
 	public static void entryPrompt(Scanner scan) {
 		HashMap<Integer, BaseUserMenu> userTypes = new HashMap<Integer, BaseUserMenu>();
+		
 		userTypes.put(1, new LibrarianMenu(scan, 0));
 		userTypes.put(2, new AdministratorMenu(scan, 0));
 		userTypes.put(3, new BorrowerMenu(scan, 0));
