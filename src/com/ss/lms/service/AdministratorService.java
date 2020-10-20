@@ -96,6 +96,43 @@ public class AdministratorService extends BaseUserService {
 		}
 	}
 
+	public String deleteBook(Book book) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = conUtil.getConnection();
+			BookDAO bdao = new BookDAO(conn);
+
+			if (book.getTitle() != null && book.getTitle().length() > 45) {
+				return "Book Title cannot be empty and should be 45 char in length";
+			}
+			bdao.deleteBook(book);
+
+			conn.commit();
+			return "Book deleted sucessfully";
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+			if (conn != null) {
+				conn.rollback();
+			}
+			return "Unable to delete book - contact admin.";
+		} finally {
+			if (conn != null) {
+				conn.close();
+			}
+		}
+	}
+
+	// public void readBooks() {
+	// 	Connection conn = null;
+	// 	try {
+	// 		conn = conUtil.getConnection();
+	// 		BookDAO bdao = new BookDAO(conn);
+	// 		bdao.readAllBooks();
+	// 	} catch (ClassNotFoundException | SQLException e) {
+	// 		e.printStackTrace();
+	// 	}
+	// }
+
 	public boolean addGenre(Genre genre) throws SQLException {
 		Connection conn = null;
 		try {

@@ -322,7 +322,6 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 							authorsToAdd.add(a);
 						}
 					}
-
 					
 					List<Genre> oldGenres = book.getGenres();
 					List<Genre> updatedGenres = updateGenres(book);
@@ -332,8 +331,6 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 							genresToAdd.add(g);
 						}
 					}
-
-					
 
 					book.setTitle(updatedTitle);
 					book.setAuthors(authorsToAdd);
@@ -346,15 +343,36 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					break;
 				case 3: /* DELETE */
 					printSubMenu("Delete a Book and Author");
+					Book deleteBook = getBookSelection(service.getBooks(null));
+					if (deleteBook.getBookId() == -1) {
+						return false;
+					} else if (deleteBook.getBookId() == 0) {
+						break;
+					}
+					String deleteMsg = "You have chosen to delete Title: " + Constants.getColor("blue", deleteBook.getTitle()) + " ID: "
+						+ Constants.getColor("blue", deleteBook.getBookId().toString()) + "\nEnter" +  Constants.getColor("green", " quit")
+						+ " at any prompt to cancel operation.";
+					printSubMenu(deleteMsg);
+
+					System.out.println("Are you sure you wish to delete this book?");
+					int confirmDeletion = promptOptions(Arrays.asList("Yes", "No"));
+					if (confirmDeletion == 1) {
+						try {
+							service.deleteBook(deleteBook);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					
 					break;
 				case 4: /* READ */
 					printSubMenu("Read Books and Authors");
+					// service.readBook();
 					break;
 				default:
 					break;
 			}
 		} while (true);
-		
 	}
 	public boolean audrGenre() {
 		int selection;
