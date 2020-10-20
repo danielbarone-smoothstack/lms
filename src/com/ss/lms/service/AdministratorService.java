@@ -71,7 +71,6 @@ public class AdministratorService extends BaseUserService {
 			if (book.getTitle() != null && book.getTitle().length() > 45) {
 				return "Book Title cannot be empty and should be 45 char in length";
 			}
-			// book.setBookId(bdao.addBookWithPk(book));
 			bdao.updateBook(book);
 			for (Author a : book.getAuthors()) {
 				adao.addBookAuthors(book.getBookId(), a.getAuthorId());
@@ -79,8 +78,6 @@ public class AdministratorService extends BaseUserService {
 			for (Genre g : book.getGenres()) {
 				gdao.addBookGenres(book.getBookId(), g.getGenreId());
 			}
-			// Do the same for genres/branche etc.
-
 			conn.commit();
 			return "Book updated sucessfully";
 		} catch (ClassNotFoundException | SQLException e) {
@@ -121,17 +118,6 @@ public class AdministratorService extends BaseUserService {
 			}
 		}
 	}
-
-	// public void readBooks() {
-	// 	Connection conn = null;
-	// 	try {
-	// 		conn = conUtil.getConnection();
-	// 		BookDAO bdao = new BookDAO(conn);
-	// 		bdao.readAllBooks();
-	// 	} catch (ClassNotFoundException | SQLException e) {
-	// 		e.printStackTrace();
-	// 	}
-	// }
 
 	public boolean addGenre(Genre genre) throws SQLException {
 		Connection conn = null;
