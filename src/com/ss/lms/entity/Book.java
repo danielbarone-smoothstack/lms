@@ -3,17 +3,12 @@ package com.ss.lms.entity;
 
 import java.util.List;
 
-/**
- * @author ppradhan
- *
- */
 public class Book {
 	private Integer bookId;
 	private String title;
 	private Integer noOfCopies;
 	private List<Author> authors;
 	private List<Genre> genres;
-//	private List<Branch> branches;
 	private Publisher publisher;
 
 	public Book(Integer bookId, String title) {
