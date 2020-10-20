@@ -148,7 +148,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					List<Author> authorSelections = new ArrayList<>();
 					int contAddAuthors = 1;
 					do {
-						System.out.println("Select an author to add to your book.");
+						printSubMenu("Select an author to add to your book.");
 						Author selectedAuthor = getAuthorSelection(service.getAuthors(null));
 						if (selectedAuthor.getAuthorId() == -1) {
 							return false;
@@ -156,14 +156,14 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 							return true;
 						}
 						authorSelections.add(selectedAuthor);
-						System.out.println("Continue selecting authors?");
+						printSubMenu("Continue selecting authors?");
 						contAddAuthors = promptOptions(Arrays.asList("Yes", "No"));
 					} while (contAddAuthors == 1);
 					// Get genre selections
 					List<Genre> genreSelections = new ArrayList<>();
 					int contAddGenres = 1;
 					do {
-						System.out.println("Select a Genre to add to your book.");
+						printSubMenu("Select a Genre to add to your book.");
 						Genre selectedGenre = getGenreSelection(service.getGenres(null));
 						if (selectedGenre.getGenreId() == -1) {
 							return false;
@@ -171,11 +171,11 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 							return true;
 						}
 						genreSelections.add(selectedGenre);
-						System.out.println("Continue selecting genres?");
+						printSubMenu("Continue selecting genres?");
 						contAddGenres = promptOptions(Arrays.asList("Yes", "No"));
 					} while (contAddGenres == 1);
 					// Get publisher selection
-					System.out.println("Select a Publisher to add to your book.");
+					printSubMenu("Select a Publisher to add to your book.");
 					Publisher selectedPublisher = getPublisherSelection(service.getPublishers(null));
 					if (selectedPublisher.getPublisherId() == -1) {
 						return false;
@@ -187,9 +187,8 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					newBook.setGenres(genreSelections);
 					newBook.setPublisher(selectedPublisher);
 					try {
-						service.addBook(newBook);
 						if (addByBranch == 1) {
-							System.out.println("Which branch would you like to add copies of your book to?");
+							printSubMenu("Which branch would you like to add copies of your book to?");
 							System.out.println(Constants.SELECT_BRANCH);
 							Branch branch = getBranchSelection(service.getBranches(null));
 							if (branch.getBranchId() == -1) {
@@ -202,10 +201,13 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 							int numCopiesInt;
 							try {
 								numCopiesInt = Integer.parseInt(numCopies);
+								service.addBook(newBook);
 								service.addBookCopies(branch, newBook, numCopiesInt);
 							} catch (Exception e) {
 								System.out.println("Invalid number of copies. Failed to add copies to this branch.");
 							}
+						} else {
+							service.addBook(newBook);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -214,6 +216,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					
 				case 2: /* UPDATE */
 					printSubMenu("Update a Book and Author");
+
 					break;
 				case 3: /* DELETE */
 					printSubMenu("Delete a Book and Author");
