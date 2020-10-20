@@ -10,6 +10,7 @@ import java.util.Date;
 import com.ss.lms.entity.Borrower;
 import com.ss.lms.entity.Book;
 import com.ss.lms.entity.Branch;
+import com.ss.lms.constants.Constants;
 import com.ss.lms.dao.BookDAO;
 import com.ss.lms.dao.BorrowerDAO;
 import com.ss.lms.entity.Loan;
@@ -50,13 +51,14 @@ public class BorrowerService extends BaseUserService {
     	Loan loan = new Loan(bookId, branchId, cardNo, dateOut, dueDate, null);
     	loanDAO.addLoan(loan);
     	conn.commit();
-    	
+    	System.out.println(Constants.CHECKOUT_SUCCESS);
     } catch (ClassNotFoundException | SQLException e) {
-    	e.printStackTrace();
+      // e.printStackTrace();
+      System.out.println(Constants.CHECKOUT_FAIL);
 		if (conn != null) {
 			conn.rollback();
 		}
-		return false;
+		return true;
     } finally {
     	if (conn != null) {
     		conn.close();

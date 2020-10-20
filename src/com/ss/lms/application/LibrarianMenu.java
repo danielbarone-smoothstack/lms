@@ -83,6 +83,8 @@ public class LibrarianMenu extends BaseUserMenu implements Callable<Boolean> {
 			newAddress = branch.getBranchAddress();
 		} 
 
+		System.out.println();
+
 		// No change, return.
 		if (newName.equals(branch.getBranchName()) && newAddress.equals(branch.getBranchAddress())) {
 			return true;
@@ -112,7 +114,7 @@ public class LibrarianMenu extends BaseUserMenu implements Callable<Boolean> {
 		boolean contSubMenu = true;
 		
 		do {
-			System.out.println(Constants.SELECT_BRANCH);
+			printSubMenu(Constants.SELECT_BRANCH);
 			setBranch(getBranchSelection(service.getBranches(null)));
 
 			// Check if user wants to quit
@@ -130,6 +132,7 @@ public class LibrarianMenu extends BaseUserMenu implements Callable<Boolean> {
 			options.put(1, editLibrary);
 			options.put(2, addCopies);
 
+			printSubMenu("Select an option");
 			contSubMenu = promptOptions(Constants.LIB3_OPTIONS, options);
 		} while (contSubMenu);
 		return false;

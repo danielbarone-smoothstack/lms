@@ -60,7 +60,7 @@ public final class Constants {
 	public static final String UPDATE_LIBRARY = getColor("blue", "Update the details of the Library");
 	public static final String ADD_COPIES = getColor("blue", "Add Copies of a Book to the Branch");
 	public static final String[] LIB3_OPTIONS = new String[] {UPDATE_LIBRARY, ADD_COPIES};
-	public static final String SELECT_BRANCH = "Select a Branch\n" + LINE_BREAK;
+	public static final String SELECT_BRANCH = "Select a Branch";
 	public static final String PICK_BOOK = "\nPick the Book you want to add copies of";
 	public static final String EXISTING_NUM_COPIES = "\nExisting number of copies: ";
 	public static final String ENTER_NEW_NUM_COPIES = "Enter new number of copies: ";
@@ -82,6 +82,8 @@ public final class Constants {
 	public static final String RETURN_BOOK = getColor("blue", "Pick the book you want to return: ");
 	public static final String ALREADY_BORROWED = getColor("red", "You've already borrowed that book!\n");
 	public static final String NO_COPIES = getColor("red", "Sorry, we don't currently have copies of that book.\n");
+	public static final String CHECKOUT_SUCCESS = getColor("green", "Successfully checked out book.");
+	public static final String CHECKOUT_FAIL = getColor("red", "\nFailed to checkout book. We may have loaned you that book before.\n");
 
 
 	// administrator

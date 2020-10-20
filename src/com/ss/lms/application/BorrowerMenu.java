@@ -110,6 +110,8 @@ public class BorrowerMenu extends BaseUserMenu implements Callable<Boolean> {
 		do {
 			System.out.print(Constants.CARD_NUMBER_PROMPT);
 			selection = scan.nextLine();
+			
+			printSubMenu("Select an option");
 			try {
 				cardNo = Integer.parseInt(selection);
 				Borrower borrower = service.checkCardNoValid(cardNo);
