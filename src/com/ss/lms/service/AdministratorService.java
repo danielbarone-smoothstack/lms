@@ -61,6 +61,41 @@ public class AdministratorService extends BaseUserService {
 		}
 	}
 
+	public String updateBook(Book book) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = conUtil.getConnection();
+			BookDAO bdao = new BookDAO(conn);
+			AuthorDAO adao = new AuthorDAO(conn);
+			GenreDAO gdao = new GenreDAO(conn);
+			if (book.getTitle() != null && book.getTitle().length() > 45) {
+				return "Book Title cannot be empty and should be 45 char in length";
+			}
+			// book.setBookId(bdao.addBookWithPk(book));
+			bdao.updateBook(book);
+			for (Author a : book.getAuthors()) {
+				adao.addBookAuthors(book.getBookId(), a.getAuthorId());
+			}
+			for (Genre g : book.getGenres()) {
+				gdao.addBookGenres(book.getBookId(), g.getGenreId());
+			}
+			// Do the same for genres/branche etc.
+
+			conn.commit();
+			return "Book updated sucessfully";
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+			if (conn != null) {
+				conn.rollback();
+			}
+			return "Unable to update book - contact admin.";
+		} finally {
+			if (conn != null) {
+				conn.close();
+			}
+		}
+	}
+
 	public boolean addGenre(Genre genre) throws SQLException {
 		Connection conn = null;
 		try {

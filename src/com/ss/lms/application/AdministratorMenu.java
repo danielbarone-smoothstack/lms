@@ -112,6 +112,109 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 		return authorObjects.get(selection - 1);
 	}
 
+	public List<Genre> updateGenres(Book book) {
+		List<Genre> updatedGenreList;
+		if (book.getGenres() == null) {
+			updatedGenreList = new ArrayList<>();
+		} else {
+			updatedGenreList = book.getGenres();
+		}
+		
+		boolean doneUpdating = false;
+		do {
+			printSubMenu("How would you like to modify " + Constants.getColor("blue", book.getTitle()) + "'s genres?");
+			String[] genreOpts = new String[] {"Add genres", "Remove genres"};
+			int genreUpdtType = promptOptions(Arrays.asList(genreOpts));
+			if (genreUpdtType == -1 || genreUpdtType == 0) {
+				break;
+			}
+			Genre selectedGenre;
+			switch(genreUpdtType) {
+				case 1: /* Add genres */
+					printSubMenu("Select an genre to add to your book.");
+					selectedGenre = getGenreSelection(service.getGenres(null));
+					if (selectedGenre.getGenreId() == -1) {
+						doneUpdating = true;
+						break;
+					} else if (selectedGenre.getGenreId() == 0) {
+						break;
+					}
+					updatedGenreList.add(selectedGenre);
+					break;
+				case 2: /* Remove genres */
+					printSubMenu("Select an genre to remove from your book.");
+					selectedGenre = getGenreSelection(updatedGenreList);
+					if (selectedGenre.getGenreId() == -1) {
+						doneUpdating = true;
+						break;
+					} else if (selectedGenre.getGenreId() == 0) {
+						break;
+					}
+					updatedGenreList.remove(selectedGenre);
+					break;
+			}
+			if (doneUpdating == false) {
+				printSubMenu("Continue modifying " + Constants.getColor("blue", book.getTitle()) + "'s genres?");
+				int contModifying = promptOptions(Arrays.asList("Yes", "No"));
+				if (contModifying != 1) {
+					doneUpdating = true;
+				}
+			}
+		} while (doneUpdating == false);
+		return updatedGenreList;
+	}
+	public List<Author> updateAuthors(Book book) {
+		List<Author> updatedAuthorList;
+		if (book.getAuthors() == null) {
+			updatedAuthorList = new ArrayList<>();
+		} else {
+			updatedAuthorList = book.getAuthors();
+		}
+		
+		boolean doneUpdating = false;
+		do {
+			printSubMenu("How would you like to modify " + Constants.getColor("blue", book.getTitle()) + "'s authors?");
+			String[] authorOpts = new String[] {"Add authors", "Remove authors"};
+			int authorUpdtType = promptOptions(Arrays.asList(authorOpts));
+			if (authorUpdtType == -1 || authorUpdtType == 0) {
+				break;
+			}
+			Author selectedAuthor;
+			switch(authorUpdtType) {
+				case 1: /* Add authors */
+					printSubMenu("Select an author to add to your book.");
+					selectedAuthor = getAuthorSelection(service.getAuthors(null));
+					if (selectedAuthor.getAuthorId() == -1) {
+						doneUpdating = true;
+						break;
+					} else if (selectedAuthor.getAuthorId() == 0) {
+						break;
+					}
+					updatedAuthorList.add(selectedAuthor);
+					break;
+				case 2: /* Remove authors */
+					printSubMenu("Select an author to remove from your book.");
+					selectedAuthor = getAuthorSelection(updatedAuthorList);
+					if (selectedAuthor.getAuthorId() == -1) {
+						doneUpdating = true;
+						break;
+					} else if (selectedAuthor.getAuthorId() == 0) {
+						break;
+					}
+					updatedAuthorList.remove(selectedAuthor);
+					break;
+			}
+			if (doneUpdating == false) {
+				printSubMenu("Continue modifying " + Constants.getColor("blue", book.getTitle()) + "'s authors?");
+				int contModifying = promptOptions(Arrays.asList("Yes", "No"));
+				if (contModifying != 1) {
+					doneUpdating = true;
+				}
+			}
+		} while (doneUpdating == false);
+		return updatedAuthorList;
+	}
+
 	public boolean audrBookAndAuthor() {
 		int selection;
 		do {
@@ -130,7 +233,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					if (addByBranch == -1) {
 						return false;
 					} else if (addByBranch == 0) {
-						return true;
+						break;
 					}
 					// Get new book title
 					String newBookTitle = "";
@@ -144,36 +247,12 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 						}
 						System.out.println(Constants.INCORRECT_INPUT);
 					} while (true);
+
 					// Get author selections
-					List<Author> authorSelections = new ArrayList<>();
-					int contAddAuthors = 1;
-					do {
-						printSubMenu("Select an author to add to your book.");
-						Author selectedAuthor = getAuthorSelection(service.getAuthors(null));
-						if (selectedAuthor.getAuthorId() == -1) {
-							return false;
-						} else if (selectedAuthor.getAuthorId() == 0) {
-							return true;
-						}
-						authorSelections.add(selectedAuthor);
-						printSubMenu("Continue selecting authors?");
-						contAddAuthors = promptOptions(Arrays.asList("Yes", "No"));
-					} while (contAddAuthors == 1);
+					List<Author> authorSelections = updateAuthors(new Book(null, newBookTitle));
 					// Get genre selections
-					List<Genre> genreSelections = new ArrayList<>();
-					int contAddGenres = 1;
-					do {
-						printSubMenu("Select a Genre to add to your book.");
-						Genre selectedGenre = getGenreSelection(service.getGenres(null));
-						if (selectedGenre.getGenreId() == -1) {
-							return false;
-						} else if (selectedGenre.getGenreId() == 0) {
-							return true;
-						}
-						genreSelections.add(selectedGenre);
-						printSubMenu("Continue selecting genres?");
-						contAddGenres = promptOptions(Arrays.asList("Yes", "No"));
-					} while (contAddGenres == 1);
+					List<Genre> genreSelections = updateGenres(new Book(null, newBookTitle));
+
 					// Get publisher selection
 					printSubMenu("Select a Publisher to add to your book.");
 					Publisher selectedPublisher = getPublisherSelection(service.getPublishers(null));
@@ -216,6 +295,53 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					
 				case 2: /* UPDATE */
 					printSubMenu("Update a Book and Author");
+					Book book = getBookSelection(service.getBooks(null));
+					if (book.getBookId() == -1) {
+						return false;
+					} else if (book.getBookId() == 0) {
+						break;
+					}
+					String subMenuMsg = "You have chosen to update Title: " + Constants.getColor("blue", book.getTitle()) + " ID: "
+						+ Constants.getColor("blue", book.getBookId().toString()) + "\nEnter" +  Constants.getColor("green", " quit")
+						+ " at any prompt to cancel operation.";
+					
+					printSubMenu(subMenuMsg);
+					System.out.println("Enter an updated book title or N/A to continue: ");
+					String updatedTitle = scan.nextLine();
+					if (updatedTitle.equals("quit")) {
+						break;
+					} else if (updatedTitle.length() == 0) {
+						updatedTitle = book.getTitle();
+					}
+
+					List<Author> oldAuthors = book.getAuthors();
+					List<Author> updatedAuthors = updateAuthors(book);
+					List <Author> authorsToAdd = new ArrayList<>();
+					for (Author a : updatedAuthors) {
+						if (oldAuthors.contains(a) != true) {
+							authorsToAdd.add(a);
+						}
+					}
+
+					
+					List<Genre> oldGenres = book.getGenres();
+					List<Genre> updatedGenres = updateGenres(book);
+					List <Genre> genresToAdd = new ArrayList<>();
+					for (Genre g : updatedGenres) {
+						if (oldGenres.contains(g) != true) {
+							genresToAdd.add(g);
+						}
+					}
+
+					
+
+					book.setTitle(updatedTitle);
+					book.setAuthors(authorsToAdd);
+					book.setGenres(genresToAdd);
+
+					try {
+						service.updateBook(book);
+					} catch (Exception e) {/**/}
 
 					break;
 				case 3: /* DELETE */
