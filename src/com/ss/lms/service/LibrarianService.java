@@ -40,7 +40,7 @@ public class LibrarianService extends BaseUserService {
     try { 
       conn = conUtil.getConnection();
       BranchDAO branchDAO = new BranchDAO(conn);
-      branchDAO.updateNoOfCopies(branch, book.getBookId(), noOfCopies);
+      branchDAO.updateNoOfCopies(branch, book, noOfCopies);
       conn.commit();
       System.out.println(Constants.SUCCESSFUL_UPDATE);
       return true;

@@ -72,7 +72,7 @@ public class BorrowerMenu extends BaseUserMenu implements Callable<Boolean> {
 		}
 
 		// checkout the book
-		return service.checkoutBook(book.getBookId(), branch.getBranchId(), borrower.getCardNo()); 
+		return service.checkoutBook(book, branch, borrower.getCardNo()); 
 	}
 
 	public boolean returnBook() throws Exception {

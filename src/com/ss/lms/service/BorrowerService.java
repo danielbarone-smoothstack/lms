@@ -13,6 +13,7 @@ import com.ss.lms.entity.Branch;
 import com.ss.lms.constants.Constants;
 import com.ss.lms.dao.BookDAO;
 import com.ss.lms.dao.BorrowerDAO;
+import com.ss.lms.dao.BranchDAO;
 import com.ss.lms.entity.Loan;
 import com.ss.lms.dao.LoanDAO;
 
@@ -34,7 +35,7 @@ public class BorrowerService extends BaseUserService {
     }
   }
 
-  public boolean checkoutBook(Integer bookId, Integer branchId, Integer cardNo) throws SQLException {
+  public boolean checkoutBook(Book book, Branch branch, Integer cardNo) throws SQLException {
     Date date = new Date();
     Calendar c = Calendar.getInstance();
     c.setTime(date);
@@ -47,9 +48,11 @@ public class BorrowerService extends BaseUserService {
     Connection conn = null;
     try { 
     	conn = conUtil.getConnection();
-    	LoanDAO loanDAO = new LoanDAO(conn);
-    	Loan loan = new Loan(bookId, branchId, cardNo, dateOut, dueDate, null);
-    	loanDAO.addLoan(loan);
+      LoanDAO loanDAO = new LoanDAO(conn);
+      BranchDAO branchDAO = new BranchDAO(conn);
+    	Loan loan = new Loan(book.getBookId(), branch.getBranchId(), cardNo, dateOut, dueDate, null);
+      loanDAO.addLoan(loan);
+      branchDAO.updateNoOfCopies(branch, book, book.getNoOfCopies() - 1);
     	conn.commit();
     	System.out.println(Constants.CHECKOUT_SUCCESS);
     } catch (ClassNotFoundException | SQLException e) {
