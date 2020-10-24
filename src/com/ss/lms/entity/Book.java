@@ -27,7 +27,7 @@ public class Book {
 				break;
 			}
 			if (i == authorCount - 1) {
-				authorString = authorString + ", and " + authors.get(i).getAuthorName();
+				authorString = authorString + "and " + authors.get(i).getAuthorName();
 				break;
 			}
 			authorString += authors.get(i).getAuthorName();

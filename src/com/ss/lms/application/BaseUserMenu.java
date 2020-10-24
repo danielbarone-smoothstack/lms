@@ -1,5 +1,6 @@
 package com.ss.lms.application;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -51,6 +52,10 @@ public abstract class BaseUserMenu {
 			return new Book(0, null);
 		}
 		return bookObjects.get(selection - 1);
+	}
+
+	public Integer getYesOrNo() {
+		return promptOptions(Arrays.asList("Yes", "No"));
 	}
 
 	public void setMenu(Integer menu) {

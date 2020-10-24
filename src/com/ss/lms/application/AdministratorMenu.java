@@ -155,7 +155,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 			}
 			if (doneUpdating == false) {
 				printSubMenu("Continue modifying " + Constants.getColor("blue", book.getTitle()) + "'s genres?");
-				int contModifying = promptOptions(Arrays.asList("Yes", "No"));
+				int contModifying = getYesOrNo();
 				if (contModifying != 1) {
 					doneUpdating = true;
 				}
@@ -207,7 +207,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 			}
 			if (doneUpdating == false) {
 				printSubMenu("Continue modifying " + Constants.getColor("blue", book.getTitle()) + "'s authors?");
-				int contModifying = promptOptions(Arrays.asList("Yes", "No"));
+				int contModifying = getYesOrNo();
 				if (contModifying != 1) {
 					doneUpdating = true;
 				}
@@ -320,14 +320,14 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					List<Genre> updatedGenres;
 
 					System.out.println("Would you like to update this book's authors?");
-					int updateSelection = promptOptions(Arrays.asList("Yes", "No"));
+					int updateSelection = getYesOrNo();
 					if (updateSelection == 1) {
 						updatedAuthors = updateAuthors(book);
 					} else {
 						updatedAuthors = book.getAuthors();
 					}
 					System.out.println("Would you like to update this book's genres?");
-					updateSelection = promptOptions(Arrays.asList("Yes", "No"));
+					updateSelection = getYesOrNo();
 					if (updateSelection == 1) {
 						updatedGenres = updateGenres(book);
 					} else {
@@ -359,7 +359,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					printSubMenu(deleteMsg);
 
 					System.out.println("Are you sure you wish to delete this book?");
-					int confirmDeletion = promptOptions(Arrays.asList("Yes", "No"));
+					int confirmDeletion = getYesOrNo();
 					if (confirmDeletion == 1) {
 						try {
 							service.deleteBook(deleteBook);
@@ -375,6 +375,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					for (Book bk : allBooks) {
 						System.out.println(bk.toString());
 					}
+					System.out.println();
 					break;
 				default:
 					break;
@@ -459,7 +460,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					printSubMenu(subMenuMsg);
 
 					System.out.println("Are you sure you wish to delete this genre?");
-					int confirmDeletion = promptOptions(Arrays.asList("Yes", "No"));
+					int confirmDeletion = getYesOrNo();
 					if (confirmDeletion == 1) {
 						try {
 							service.deleteGenre(genre);
@@ -612,7 +613,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					printSubMenu(subMenuMsg);
 
 					System.out.println("Are you sure you wish to delete this publisher?");
-					int confirmDeletion = promptOptions(Arrays.asList("Yes", "No"));
+					int confirmDeletion = getYesOrNo();
 					if (confirmDeletion == 1) {
 						try {
 							service.deletePublisher(publisher);
@@ -742,7 +743,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					printSubMenu(subMenuMsg);
 
 					System.out.println("Are you sure you wish to delete this branch?");
-					int confirmDeletion = promptOptions(Arrays.asList("Yes", "No"));
+					int confirmDeletion = getYesOrNo();
 					if (confirmDeletion == 1) {
 						try {
 							service.deleteBranch(branch);
@@ -893,7 +894,7 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 					printSubMenu(subMenuMsg);
 
 					System.out.println("Are you sure you wish to delete this borrower?");
-					int confirmDeletion = promptOptions(Arrays.asList("Yes", "No"));
+					int confirmDeletion = getYesOrNo();
 					if (confirmDeletion == 1) {
 						try {
 							service.deleteBorrower(borrower);
