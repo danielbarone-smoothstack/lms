@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ss.lms.entity.Genre;
+import com.ss.lms.entity.Book;
 
 public class GenreDAO extends BaseDAO<Genre> {
 	
@@ -25,6 +26,10 @@ public class GenreDAO extends BaseDAO<Genre> {
 
 	public void deleteGenre(Genre genre) throws ClassNotFoundException, SQLException {
 		save("DELETE FROM tbl_genre WHERE genre_id = ?", new Object[] { genre.getGenreId() });
+	}
+
+	public void deleteBookGenres(Book book) throws ClassNotFoundException, SQLException {
+		save("DELETE FROM tbl_book_genres WHERE bookId = ?", new Object[] { book.getBookId() });
 	}
 
 	public List<Genre> readAllGenres() throws SQLException, ClassNotFoundException {

@@ -315,31 +315,34 @@ public class AdministratorMenu extends BaseUserMenu implements Callable<Boolean>
 						updatedTitle = book.getTitle();
 					}
 
-					List<Author> oldAuthors = book.getAuthors();
-					List<Author> updatedAuthors = updateAuthors(book);
-					List <Author> authorsToAdd = new ArrayList<>();
-					for (Author a : updatedAuthors) {
-						if (oldAuthors.contains(a) != true) {
-							authorsToAdd.add(a);
-						}
-					}
 					
-					List<Genre> oldGenres = book.getGenres();
-					List<Genre> updatedGenres = updateGenres(book);
-					List <Genre> genresToAdd = new ArrayList<>();
-					for (Genre g : updatedGenres) {
-						if (oldGenres.contains(g) != true) {
-							genresToAdd.add(g);
-						}
+					List<Author> updatedAuthors;
+					List<Genre> updatedGenres;
+
+					System.out.println("Would you like to update this book's authors?");
+					int updateSelection = promptOptions(Arrays.asList("Yes", "No"));
+					if (updateSelection == 1) {
+						updatedAuthors = updateAuthors(book);
+					} else {
+						updatedAuthors = book.getAuthors();
+					}
+					System.out.println("Would you like to update this book's genres?");
+					updateSelection = promptOptions(Arrays.asList("Yes", "No"));
+					if (updateSelection == 1) {
+						updatedGenres = updateGenres(book);
+					} else {
+						updatedGenres = book.getGenres();
 					}
 
 					book.setTitle(updatedTitle);
-					book.setAuthors(authorsToAdd);
-					book.setGenres(genresToAdd);
+					book.setAuthors(updatedAuthors);
+					book.setGenres(updatedGenres);
 
 					try {
 						service.updateBook(book);
-					} catch (Exception e) {/**/}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 
 					break;
 				case 3: /* DELETE */

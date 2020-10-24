@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ss.lms.entity.Author;
+import com.ss.lms.entity.Book;
 
 public class AuthorDAO extends BaseDAO<Author> {
 	
@@ -25,6 +26,10 @@ public class AuthorDAO extends BaseDAO<Author> {
 
 	public void deleteAuthor(Author author) throws ClassNotFoundException, SQLException {
 		save("DELETE FROM tbl_author WHERE authorId = ?", new Object[] { author.getAuthorId() });
+	}
+
+	public void deletBookAuthors(Book book) throws ClassNotFoundException, SQLException {
+		save("DELETE FROM tbl_book_authors WHERE bookId = ?", new Object[] { book.getBookId() });
 	}
 
 	public List<Author> readAllAuthors() throws SQLException, ClassNotFoundException {

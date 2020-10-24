@@ -72,19 +72,26 @@ public class AdministratorService extends BaseUserService {
 				return "Book Title cannot be empty and should be 45 char in length";
 			}
 			bdao.updateBook(book);
+
+			// Inefficient -- fix this.
+			adao.deletBookAuthors(book);
 			for (Author a : book.getAuthors()) {
 				adao.addBookAuthors(book.getBookId(), a.getAuthorId());
 			}
+			// Inefficient -- fix this.
+			gdao.deleteBookGenres(book);
 			for (Genre g : book.getGenres()) {
 				gdao.addBookGenres(book.getBookId(), g.getGenreId());
 			}
 			conn.commit();
+			System.out.println(Constants.SUCCESSFUL_UPDATE);
 			return "Book updated sucessfully";
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 			if (conn != null) {
 				conn.rollback();
 			}
+			System.out.println(Constants.FAILED_UPDATE);
 			return "Unable to update book - contact admin.";
 		} finally {
 			if (conn != null) {
